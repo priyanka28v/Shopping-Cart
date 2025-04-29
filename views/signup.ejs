@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGNUP FORM</title>
+    <style>
+        /* Full-page background */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Arial", sans-serif;
+            background: url("library-bg.jpg") no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Dark overlay for readability */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        /* Glassmorphism signup box */
+        .signup-container {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            width: 350px;
+        }
+
+        /* Form Styling */
+        h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        label {
+            color: white;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        input::placeholder {
+            color: gray;
+        }
+
+        /* Buttons */
+        .button {
+            width: 100%;
+            background: #2ecc71;
+            /* Green theme */
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease-in-out;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background: #27ae60;
+            transform: scale(1.05);
+        }
+
+        .back-button {
+            background: #e74c3c;
+        }
+
+        .back-button:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="overlay"></div>
+
+    <div class="signup-container">
+        <h2>Signup</h2>
+        <form id='signup-form' action="/signup" method="post">
+            <label for="username">ENTER YOUR NAME</label>
+            <input type="text" id="username" name="username" placeholder="USERNAME" required>
+
+            <label for="email">ENTER YOUR EMAIL</label>
+            <input type="email" name="email" id="email" placeholder="EMAIL" required>
+
+            <label for="password">ENTER YOUR PASSWORD</label>
+            <input type="password" id="password" name="password" placeholder="PASSWORD" required>
+
+            <button class="button" type="submit">Signup</button>
+            <button class="button back-button" type="button" onclick="window.history.back();">Back</button>
+
+            <div id="msg"></div>
+        </form>
+    </div>
+
+</body>
+<script>
+    const message = document.getElementById('msg')
+    const form = document.getElementById('signup-form')
+    const username = document.getElementById('username')
+    const email = document.getElementById('email')
+    const password = document.getElementById('password')
+    form.addEventListener('submit', (e) => {
+        e.preventDefault()
+
+        message.textContent = '';
+
+        fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',//yha hum manunually data ko url encoded form mai le rhe hai
+            },
+            body: new URLSearchParams({
+                //url search params isliye lgaya kyuki data ko fetch khud string mai nhi convert krega
+                //hme isko string mai convert krke dena pdega kyuki backend mai jo middleware hai vo string read kr skta hai
+                username: username.value,
+                email: email.value,
+                password: password.value
+            })
+        })
+            .then((response) => {
+                return response.json()
+            })
+
+            .then((data) => {
+                if (data.success) {
+                    alert(`${"user created successfully!!"}`)
+                    window.location.href = '/login'
+                } else {
+                    alert(`${"user already exist,please try another signup!!"}`)
+                    form.reset();
+                }
+            }).catch((err) => {
+                console.log(err)
+                message.textContent = err
+            })
+    })
+</script>
+
+</html>

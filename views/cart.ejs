@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHOPPING CART</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+        }
+
+        .products {
+            display: inline-block;
+            background-color: white;
+            width: 250px;
+            margin: 20px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        .products img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .products h3 {
+            margin: 10px 0;
+        }
+
+        .products button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .products button:hover {
+            background-color: #218838;
+        }
+
+        .cart-button {
+            margin: 30px;
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .cart-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>WELCOME TO SHOPPING CART</h1>
+
+    <div class="products">
+        <img src="C:\Users\DELL\Pictures\laptop image 1.webp" alt="laptop">
+        <h3>DELL LAPTOP</h3>
+        <h3>Price: ₹34,000</h3>
+        <button id="addLaptop" onclick="addToCart('Dell Laptop',34000,1)">Add to Cart</button>
+    </div>
+
+    <div class="products">
+        <img src="C:\Users\DELL\Pictures\laptop image 1.webp" alt="washing machine">
+        <h3>Washing Machine</h3>
+        <h3>Price: ₹14,000</h3>
+        <button id="addWashing" onclick="addToCart('Washing Machine',14000,1)">Add to Cart</button>
+    </div>
+
+    <div class="products">
+        <img src="C:\Users\DELL\Pictures\laptop image 1.webp" alt="iphone">
+        <h3>iPhone</h3>
+        <h3>Price: ₹67,000</h3>
+        <button id="addIphone" onclick="addToCart('iPhone',67000,1)">Add to Cart</button>
+    </div>
+
+    <br>
+    <button class="cart-button" onclick="go_to_cart()">Go to Cart</button>
+
+    <script>
+        //document.getElementsByClassName('products').value
+        document.getElementById('addLaptop')
+        document.getElementById('addWashing')
+        document.getElementById('addIphone')
+
+        //addToCart function
+        function addToCart(Name,Price,Quantity) {
+            fetch('/cart',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        Name: Name,
+                        Price: Price,
+                        Quantity: Quantity
+                        })
+                        
+            }).then(response => {
+                alert('PRODUCT ADDED TO CART')
+                console.log(response)})
+            }
+
+            const go_to_cart=()=>{
+                window.location.href = '/displayCart'
+            }
+    </script>
+</body>
+</html>
